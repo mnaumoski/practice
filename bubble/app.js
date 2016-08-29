@@ -5,6 +5,7 @@ var numbers = [1, 326, 251, 24, 284, 364, 287, 74, 89, 63, 455, 130, 408, 378, 3
 
 startDiv.innerHTML = numbers;
 
+//confusion on the discretionary use of nums below. 
 function sorter(nums) {
 	//the first loop is for looping through the array of numbers
 	for (var i=0; i<nums.length; i++){
@@ -20,11 +21,11 @@ function sorter(nums) {
 	resultDiv.innerHTML = nums;
 }
 
-
+//clicked function starts the actual looping
 function clicked() {
 	sorter(numbers);
 }
-
+//this is how it all begins. 
 button[0].addEventListener('click', clicked);
 
 

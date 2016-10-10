@@ -1,0 +1,17 @@
+{
+  "name": "userprompt",
+  "version": "1.0.0",
+  "main": "append.js",
+  "dependencies": {
+    "geocoder": "^0.2.2",
+    "inquirer": "^1.2.1",
+    "request": "^2.75.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

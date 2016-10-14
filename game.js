@@ -34,7 +34,7 @@ var score = 0;
 
 var createPlayer = function() {
 
-    if (starters.length + subs.length < 8) {
+    if (starters.length + subs.length < 3) {
         console.log("\nNew player!\n");
         console.log("+++++++++++++++++++++++");
 
@@ -67,7 +67,7 @@ var createPlayer = function() {
         }]).then(function(answers) {
 
             var player = new Player(answers.name, answers.position, parseInt(answers.offense), parseInt(answers.defense));
-            if (starters.length < 5) {
+            if (starters.length < 2) {
                 starters.push(player);
                 console.log(player.name + " added to starters");
 
@@ -80,8 +80,107 @@ var createPlayer = function() {
         })
     } else {
 
-        
-        }
+        playGame(0);
     }
 }
+
+playGame = function(x) {
+    if (x < 2) {
+        x++;
+        console.log("------\nRound " + x + "\n-----------");
+        var offenseRandom = (Math.floor(Math.random() * 50) + 1);
+        var defenseRandom = (Math.floor(Math.random() * 50) + 1);
+
+        var teamOffense = 0;
+        var teamDefense = 0;
+
+        for (var i = 0; i < starters.length; i++) {
+            teamOffense = teamOffense + starters[i].offense;
+            teamDefense = teamDefense + starters[i].defense;
+        }
+        console.log("Team offense: " + teamOffense);
+        console.log("Team defense: " + teamDefense);
+        console.log("Random offense: " + offenseRandom);
+        console.log("Random defense: " + defenseRandom);
+
+        if (offenseRandom < teamOffense) {
+            console.log("You scored a point!");
+            score++;
+        }
+        if (defenseRandom > teamDefense) {
+            console.log("You were scored upon!");
+            score--;
+        }
+        inquirer.prompt([{
+            name: "confirm",
+            type: "confirm",
+            message: "Would you like to add a substitution?"
+        }]).then(function(answer) {
+            if (answer.confirm == true) {
+                inquirer.prompt([{
+                    name: "sub",
+                    type: "rawlist",
+                    message: "Who would you like to sub in?",
+                    choices: subs,
+                }]).then(function(subIn) {
+
+                    var sideline = {};
+                    var number = 0;
+                    for (var i = 0; i < subs.length; i++) {
+                        if (subs[i].name == subIn.sub) {
+                            number = i;
+                            sideline = subs[i];
+                        }
+                    }
+                    inquirer.prompt([{
+                        name: "sub",
+                        type: "rawlist",
+                        message: "Who would you like to sub out?",
+                        choices: starters
+                    }]).then(function(subOut) {
+                        for (var i = 0; i < starters.length; i++) {
+                            if (starters[i].name == subOut.sub) {
+                                subs[number] = starters[i];
+                                starters[i] = sideline;
+                                console.log("Substituion made!")
+                            }
+                        }
+                        playGame(x);
+                    })
+                })
+            } else {
+                playGame(x);
+            }
+        })
+    } else {
+        console.log("final score is " + score);
+        if (score > 0) {
+            console.log("Good game! \nCurrent stats have improved!");
+            for (var i = 0; i < starters.length; i++) {
+                starters[i].goodGame();
+            }
+        }
+        if (score < 0) {
+            console.log("Bad game!\nCurrent stats suck!");
+            for (var i = 0; i < starters.length; i++) {
+                starters[i].badGame();
+            }
+        } else {
+            console.log("It's a tie game!");
+        }
+
+        inquirer.prompt([{
+            name: "again",
+            type: "confirm",
+            message: "Would you like to play another match?"
+        }]).then(function(answer) {
+            if (answer.again == true) {
+                playGame(0);
+            } else {
+                console.log("Come back soon!");
+            }
+        })
+    }
+}
+
 createPlayer();

@@ -12,6 +12,7 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
+    runSearch();
 })
 
 // READ
@@ -19,14 +20,37 @@ connection.connect(function(err) {
 //   if(err) throw err;
 //   console.log(res);
 // });
+function runSearch{
+prompt.start();
+
+// Get these properties from the user:
+// songs sung by a specific artist
+// artists who appear within the top 5000 more than once
+// data contained within a specific range
+// specific song in
+
+// * HINT: There are some MySQL queries which could make some of these tasks even easier to accomplish. Feel free to look at MySQL's documentation to find some of them.
+// * BONUS: Update your application to add in a new column called `genre` which takes a specific song within the top 5000 charts, calls a music API like Spotify, and then updates that song's row to include the genre found. 
+prompt.get([ 'songsBySpecificArtist', 'artistMoreThanOnce', 'specificRange', 'specificSong'], function(err, result) {
+
+
+
+    // 
+    // Log the results. 
+    // 
+    console.log('Command-line input received:');
+    console.log('  username: ' + result.username);
+    console.log('  email: ' + result.email);
+});
 
 connection.query('SELECT * FROM top5000 ', function(err, res) {
     if (err) throw err;
     for (var i = 0; i < 2; i++) {
-        console.log("|" + res[i].artist + "|" + res[i].song + "|" + res[i].year + "|" + res[i].totalSales+ "|" + res[i].usSales + "|" + res[i].ukSales + "|" );
+        console.log("|" + res[i].artist + "|" + res[i].song + "|" + res[i].year + "|" + res[i].totalSales + "|" + res[i].usSales + "|" + res[i].ukSales + "|");
     }
     console.log("---------------------------------------------");
 });
+}
 
 connection.query('SELECT * FROM top5000 WHERE artist=?', ["Celine Dion"], function(err, res) {
     if (err) throw err;
@@ -36,6 +60,7 @@ connection.query('SELECT * FROM top5000 WHERE artist=?', ["Celine Dion"], functi
     // console.log(res);
 })
 
+// SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1
 // create
 // connection.query('INSERT INTO music2 SET ?', {
 //     title: "Hit me baby one more time",
@@ -59,4 +84,3 @@ connection.query('SELECT * FROM top5000 WHERE artist=?', ["Celine Dion"], functi
 // }, function(err, res) {
 //     console.log(res);
 // });
-
